@@ -36,7 +36,7 @@ Admin can create artifacts. Both roles can read artifacts and upload files.
 | `npm run dev:server` | Express only |
 | `npm run dev:web` | Vite only |
 | `npm run db:migrate` | Apply SQL migrations |
-| `npm run db:seed` | Idempotent demo users, BRD, Architecture, sample files |
+| `npm run db:seed` | Idempotent demo users, BRD, Architecture, RACI, Blog, and sample files under `data/uploads/` |
 | `npm test` | Frontend Vitest |
 | `npm run test:server` | API + SQLite tests |
 | `npm run test:smoke` | Login → create → upload → download → delete |
@@ -46,4 +46,4 @@ Admin can create artifacts. Both roles can read artifacts and upload files.
 
 Versioned at `/api/v1`. Contract: [server/openapi.yaml](server/openapi.yaml).
 
-Auth uses a signed JWT in `Authorization: Bearer <token>`. Artifact files live on disk under `data/uploads/` with metadata in SQLite.
+Auth uses a signed JWT in `Authorization: Bearer <token>`. Seed includes BRD, Architecture, RACI, and Blog. Artifact files still live on disk under `data/uploads/` with metadata in SQLite.

@@ -1100,6 +1100,13 @@ main {
   color: var(--text-muted);
 }
 
+.upload-hint {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  line-height: 1.4;
+}
+
 .modal .btn-primary {
   margin-top: 0;
   min-height: 36px;

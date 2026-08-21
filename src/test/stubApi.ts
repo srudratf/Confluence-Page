@@ -29,6 +29,32 @@ export const SEED_ARCH: ArtifactSummary = {
   updatedAt: '2026-07-26T00:00:00.000Z',
 }
 
+export const SEED_RACI: ArtifactSummary = {
+  id: 'cccccccc-cccc-cccc-cccc-cccccccccccc',
+  slug: 'raci',
+  name: 'RACI',
+  folder: 'ops',
+  path: 'ops/raci/',
+  description: 'Roles and accountable parties for program operations.',
+  status: 'draft',
+  fileCount: 1,
+  createdAt: '2026-07-26T00:00:00.000Z',
+  updatedAt: '2026-07-26T00:00:00.000Z',
+}
+
+export const SEED_BLOG: ArtifactSummary = {
+  id: 'dddddddd-dddd-dddd-dddd-dddddddddddd',
+  slug: 'blog',
+  name: 'Blog',
+  folder: 'comms',
+  path: 'comms/blog/',
+  description: 'Cohort posts and program communications.',
+  status: 'draft',
+  fileCount: 1,
+  createdAt: '2026-07-26T00:00:00.000Z',
+  updatedAt: '2026-07-26T00:00:00.000Z',
+}
+
 function json(status: number, body: unknown) {
   return {
     ok: status >= 200 && status < 300,
@@ -59,6 +85,8 @@ export function stubConfluenceApi() {
   const artifacts: ArtifactSummary[] = [
     { ...SEED_BRD },
     { ...SEED_ARCH },
+    { ...SEED_RACI },
+    { ...SEED_BLOG },
   ]
   const details = new Map<string, ArtifactDetail>([
     [
@@ -97,6 +125,46 @@ export function stubConfluenceApi() {
             relativePath: 'docs/architecture/overview.md',
             uploadedBy: DEMO_USERS[0].id,
             createdAt: SEED_ARCH.createdAt,
+          },
+        ],
+      },
+    ],
+    [
+      SEED_RACI.id,
+      {
+        ...SEED_RACI,
+        createdBy: DEMO_USERS[0].id,
+        updatedBy: DEMO_USERS[0].id,
+        files: [
+          {
+            id: 'file-raci',
+            artifactId: SEED_RACI.id,
+            originalName: 'matrix.md',
+            mimeType: 'text/markdown',
+            sizeBytes: 140,
+            relativePath: 'ops/raci/matrix.md',
+            uploadedBy: DEMO_USERS[0].id,
+            createdAt: SEED_RACI.createdAt,
+          },
+        ],
+      },
+    ],
+    [
+      SEED_BLOG.id,
+      {
+        ...SEED_BLOG,
+        createdBy: DEMO_USERS[0].id,
+        updatedBy: DEMO_USERS[0].id,
+        files: [
+          {
+            id: 'file-blog',
+            artifactId: SEED_BLOG.id,
+            originalName: 'intro.md',
+            mimeType: 'text/markdown',
+            sizeBytes: 110,
+            relativePath: 'comms/blog/intro.md',
+            uploadedBy: DEMO_USERS[0].id,
+            createdAt: SEED_BLOG.createdAt,
           },
         ],
       },
@@ -188,7 +256,7 @@ export function stubConfluenceApi() {
             tests: 0,
             ops: artifacts.filter((item) => item.folder === 'ops').length,
             tools: 0,
-            comms: 0,
+            comms: artifacts.filter((item) => item.folder === 'comms').length,
           },
         },
       })
@@ -202,7 +270,7 @@ export function stubConfluenceApi() {
         status?: ArtifactSummary['status']
       }
       const created: ArtifactSummary = {
-        id: 'cccccccc-cccc-cccc-cccc-cccccccccccc',
+        id: 'eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee',
         slug: body.name.toLowerCase().replace(/\s+/g, '-'),
         name: body.name,
         folder: body.folder,

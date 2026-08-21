@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import request from 'supertest'
-import { SEED_BRD_ID } from '../seeds/seed.ts'
+import { SEED_BRD_ID, SEED_RACI_ID } from '../seeds/seed.ts'
 import { auth, closeTestContext, createTestContext, login, type TestContext } from './helpers.ts'
 
 describe('artifact files API', () => {
@@ -36,6 +36,44 @@ describe('artifact files API', () => {
     expect(downloaded.status).toBe(200)
     expect(String(downloaded.body)).toContain('# BRD')
     expect(downloaded.headers['content-disposition']).toMatch(/scope\.md/)
+  })
+
+  it('lists and downloads seeded RACI matrix.md and lets a member upload onto it', async () => {
+    ctx = createTestContext()
+    const token = await login(ctx.app, 'member@thoughtfocus.com', 'Member123!')
+    const listed = await request(ctx.app)
+      .get(`/api/v1/artifacts/${SEED_RACI_ID}/files`)
+      .set(auth(token))
+
+    expect(listed.status).toBe(200)
+    expect(listed.body.data).toHaveLength(1)
+    expect(listed.body.data[0].originalName).toBe('matrix.md')
+
+    const fileId = listed.body.data[0].id as string
+    const downloaded = await request(ctx.app)
+      .get(`/api/v1/artifacts/${SEED_RACI_ID}/files/${fileId}/download`)
+      .set(auth(token))
+      .buffer(true)
+      .parse((res, callback) => {
+        const chunks: Buffer[] = []
+        res.on('data', (chunk) => chunks.push(Buffer.from(chunk)))
+        res.on('end', () => callback(null, Buffer.concat(chunks)))
+      })
+
+    expect(downloaded.status).toBe(200)
+    expect(String(downloaded.body)).toContain('# RACI')
+    expect(downloaded.headers['content-disposition']).toMatch(/matrix\.md/)
+
+    const uploaded = await request(ctx.app)
+      .post(`/api/v1/artifacts/${SEED_RACI_ID}/files`)
+      .set(auth(token))
+      .attach('file', Buffer.from('notes'), 'notes.md')
+
+    expect(uploaded.status).toBe(201)
+    expect(uploaded.body.data.originalName).toBe('notes.md')
+    expect(uploaded.headers.location).toBe(
+      `/api/v1/artifacts/${SEED_RACI_ID}/files/${uploaded.body.data.id}`,
+    )
   })
 
   it('lets a member upload an allowed file', async () => {

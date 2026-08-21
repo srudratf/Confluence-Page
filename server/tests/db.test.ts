@@ -57,7 +57,7 @@ describe('database schema', () => {
     expect(after.total).toBe(0)
   })
 
-  it('seeds demo users and the two docs artifacts', () => {
+  it('seeds demo users and the four hub artifacts', () => {
     ctx = createTestContext()
     const users = ctx.db.prepare('SELECT email, role FROM users ORDER BY email').all()
     expect(users).toEqual([
@@ -67,7 +67,9 @@ describe('database schema', () => {
     const artifacts = ctx.db.prepare('SELECT slug, folder, status FROM artifacts ORDER BY slug').all()
     expect(artifacts).toEqual([
       { slug: 'architecture', folder: 'docs', status: 'final' },
+      { slug: 'blog', folder: 'comms', status: 'draft' },
       { slug: 'brd', folder: 'docs', status: 'final' },
+      { slug: 'raci', folder: 'ops', status: 'draft' },
     ])
   })
 })

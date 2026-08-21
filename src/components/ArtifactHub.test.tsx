@@ -66,4 +66,16 @@ describe('ArtifactHub data flow', () => {
     expect(await screen.findByText('scope.md')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /download/i })).toBeInTheDocument()
   })
+
+  it('shows RACI and Blog cards and opens RACI with matrix.md', async () => {
+    stubConfluenceApi()
+    const user = await signInAsAdmin()
+
+    expect(screen.getByText('RACI')).toBeInTheDocument()
+    expect(screen.getByText('Blog')).toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: /RACI/i }))
+    expect(await screen.findByRole('heading', { name: 'RACI' })).toBeInTheDocument()
+    expect(await screen.findByText('matrix.md')).toBeInTheDocument()
+  })
 })

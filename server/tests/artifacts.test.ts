@@ -15,8 +15,10 @@ describe('artifacts API', () => {
     const response = await request(ctx.app).get('/api/v1/artifacts').set(auth(token))
 
     expect(response.status).toBe(200)
-    expect(response.body.data).toHaveLength(2)
+    expect(response.body.data).toHaveLength(4)
     expect(response.body.meta.folderCounts.docs).toBe(2)
+    expect(response.body.meta.folderCounts.ops).toBe(1)
+    expect(response.body.meta.folderCounts.comms).toBe(1)
     expect(response.body.data.every((item: { fileCount: number }) => item.fileCount === 1)).toBe(true)
   })
 

@@ -147,6 +147,8 @@ export function ArtifactPanel({ artifactId, onClose, onChanged }: ArtifactPanelP
           <span>{pending ? 'Uploading…' : 'Upload file'}</span>
           <input
             type="file"
+            accept=".md,.txt,.pdf,.png,.jpg,.jpeg,.json,.yml,.yaml,.html,.zip"
+            aria-describedby="upload-file-hint"
             disabled={pending}
             onChange={(event) => {
               const file = event.target.files?.[0]
@@ -154,6 +156,9 @@ export function ArtifactPanel({ artifactId, onClose, onChanged }: ArtifactPanelP
               event.target.value = ''
             }}
           />
+          <span id="upload-file-hint" className="upload-hint">
+            Max 10MB. Allowed: .md, .txt, .pdf, .png, .jpg, .jpeg, .json, .yml, .yaml, .html, .zip
+          </span>
         </label>
       )}
     </section>
